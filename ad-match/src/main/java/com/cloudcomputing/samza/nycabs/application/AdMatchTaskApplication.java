@@ -17,19 +17,19 @@ import java.util.Map;
 public class AdMatchTaskApplication implements TaskApplication {
     // Consider modify this zookeeper address, localhost may not be a good choice.
     // If this task application is executing in slave machine.
-    private static final List<String> KAFKA_CONSUMER_ZK_CONNECT = ImmutableList.of("localhost:2181");
+    private static final List<String> KAFKA_CONSUMER_ZK_CONNECT = ImmutableList.of(":2181"); // TODO: Fill in
 
     // Consider modify the bootstrap servers address. This example only cover one address.
-    private static final List<String> KAFKA_PRODUCER_BOOTSTRAP_SERVERS = ImmutableList.of("localhost:9092");
+    private static final List<String> KAFKA_PRODUCER_BOOTSTRAP_SERVERS = ImmutableList.of(":9092"); // TODO: fill in
     private static final Map<String, String> KAFKA_DEFAULT_STREAM_CONFIGS = ImmutableMap.of("replication.factor", "1");
 
     @Override
     public void describe(TaskApplicationDescriptor taskApplicationDescriptor) {
         // Define a system descriptor for Kafka.
-        KafkaSystemDescriptor kafkaSystemDescriptor =
-                new KafkaSystemDescriptor("kafka").withConsumerZkConnect(KAFKA_CONSUMER_ZK_CONNECT)
-                        .withProducerBootstrapServers(KAFKA_PRODUCER_BOOTSTRAP_SERVERS)
-                        .withDefaultStreamConfigs(KAFKA_DEFAULT_STREAM_CONFIGS);
+        KafkaSystemDescriptor kafkaSystemDescriptor = new KafkaSystemDescriptor("kafka")
+                .withConsumerZkConnect(KAFKA_CONSUMER_ZK_CONNECT)
+                .withProducerBootstrapServers(KAFKA_PRODUCER_BOOTSTRAP_SERVERS)
+                .withDefaultStreamConfigs(KAFKA_DEFAULT_STREAM_CONFIGS);
 
         // Hint about streams, please refer to AdMatchConfig.java
         // We need one input stream "events", one output stream "ad-stream".
@@ -37,9 +37,17 @@ public class AdMatchTaskApplication implements TaskApplication {
         // Define your input and output descriptor in here.
         // Reference solution:
         //  https://github.com/apache/samza-hello-samza/blob/master/src/main/java/samza/examples/wikipedia/task/application/WikipediaStatsTaskApplication.java
+        KafkaInputDescriptor eventsInputDescriptor = kafkaSystemDescriptor
+                .getInputDescriptor("events", new JsonSerde<>());
+            
+        KafkaOutputDescriptor adOutputDescriptor = kafkaSystemDescriptor
+                .getOutputDescriptor("ad-stream", new JsonSerde<>());
 
         // Bound you descriptor with your taskApplicationDescriptor in here.
         // Please refer to the same link.
+        taskApplicationDescriptor.withDefaultSystem(kafkaSystemDescriptor);
+        taskApplicationDescriptor.withInputStream(eventsInputDescriptor);
+        taskApplicationDescriptor.withOutputStream(adOutputDescriptor);
 
         taskApplicationDescriptor.withTaskFactory((StreamTaskFactory)() -> new AdMatchTask());
     }

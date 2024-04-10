@@ -136,6 +136,31 @@ public class AdMatchTask implements StreamTask, InitableTask {
         }
     }
 
+    public void processRideInterest(String userId, String interest, Integer duration) {
+        // TODO: fill in
+    }
+
+    public void processRideRequest(String blockId, String clientId, Double longitude, Double latitude, String genderPreference) {
+        // TODO: fill in
+    }
+
+    public void processEvents(Map<String, Object> msg, MessageCollector collector) {
+        String type = (String) msg.get("type");
+        if (type.equals("RIDE_REQUEST")) {
+            String blockId = msg.get("blockId").toString();
+            String clientId = msg.get("clientId").toString();
+            Double longitude = (Double) msg.get("longitude");
+            Double latitude = (Double) msg.get("latitude");
+            String genderPreference = (String) msg.get("gender_preference");
+            processRideRequest(blockId, clientId, longitude, latitude, genderPreference);
+        } else if (type.equals("RIDE_INTEREST")) {
+            String userId = msg.get("userId").toString();
+            String interest = msg.get("interest").toString();
+            Integer duration = (Integer) msg.get("duration");
+            processRideInterest(userId, interest, duration);
+        }
+    }
+
     @Override
     @SuppressWarnings("unchecked")
     public void process(IncomingMessageEnvelope envelope, MessageCollector collector, TaskCoordinator coordinator) {
@@ -149,7 +174,7 @@ public class AdMatchTask implements StreamTask, InitableTask {
 
         if (incomingStream.equals(AdMatchConfig.EVENT_STREAM.getStream())) {
             // Handle Event messages
-
+            processEvents((Map<String, Object>) envelope.getMessage(), collector);
         } else {
             throw new IllegalStateException("Unexpected input stream: " + envelope.getSystemStreamPartition());
         }
