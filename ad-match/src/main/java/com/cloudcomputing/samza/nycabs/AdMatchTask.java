@@ -92,6 +92,10 @@ public class AdMatchTask implements StreamTask, InitableTask {
             tags.add("lowCalories");
         }
         if (bloodSugar.intValue() < 2 || mood.intValue() < 4) {
+            /// DEBUG
+            if ((Integer) userProfile.get("userId") == 3) {
+                System.out.println("after riderStatus update, client 3 should not have energyProviders tag");
+            }
             tags.add("energyProviders");
         }
         if (active.intValue() == 3) {
@@ -304,6 +308,7 @@ public class AdMatchTask implements StreamTask, InitableTask {
                 Map<String, Object> storeProfile = entry.getValue();
                 String storeTag = (String) storeProfile.get("tag");
 
+                System.out.println(storeId + " has tag: " + storeTag + ", userId " + clientId + " has tags: " + userTags.toString());
                 if (!tagMatch(storeTag, userTags)) {
                     // only process stores that have matching tags
                     continue;
