@@ -308,7 +308,7 @@ public class AdMatchTask implements StreamTask, InitableTask {
                 Map<String, Object> storeProfile = entry.getValue();
                 String storeTag = (String) storeProfile.get("tag");
 
-                System.out.println(storeId + " has tag: " + storeTag + ", userId " + clientId + " has tags: " + userTags.toString());
+                System.out.println(storeProfile.get("name").toString() + " has tag: " + storeTag + ", userId " + clientId + " has tags: " + userTags.toString());
                 if (!tagMatch(storeTag, userTags)) {
                     // only process stores that have matching tags
                     continue;
