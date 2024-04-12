@@ -306,6 +306,7 @@ public class AdMatchTask implements StreamTask, InitableTask {
         // TODO: fill in
         System.out.println("processRideRequest(" + clientId.toString() + ")...");
         Map<String, Object> userProfile = userInfo.get(clientId);
+        System.out.println(userProfile.toString());
         Set<String> userTags = getUserTags(userProfile);
 
         String bestStoreId = null;
