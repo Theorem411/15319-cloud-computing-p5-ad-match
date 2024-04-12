@@ -56,14 +56,17 @@ public class TestAdMatchTask {
         Assert.assertTrue(interestTest.get("userId").toString().equals("1")
                 && interestTest.get("name").toString().equals("Cloud Ramen"));
 
+        System.out.println("afford test...");
         Map<String, Object> affordTest = (Map<String, Object>) resultIter.next();
         Assert.assertTrue(affordTest.get("userId").toString().equals("2")
                 && affordTest.get("name").toString().equals("Luxury Cloud Bakery"));
 
+        System.out.println("update status test...");
         Map<String, Object> updateStatusTest = (Map<String, Object>) resultIter.next();
         Assert.assertTrue(updateStatusTest.get("userId").toString().equals("3")
                 && updateStatusTest.get("name").toString().equals("Cloud Cafe"));
-
+        
+        System.out.println("update age test...");
         Map<String, Object> ageTest = (Map<String, Object>) resultIter.next();
         Assert.assertTrue(ageTest.get("userId").toString().equals("4")
                 && ageTest.get("name").toString().equals("Cloud Bakery II"));

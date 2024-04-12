@@ -161,7 +161,7 @@ public class AdMatchTask implements StreamTask, InitableTask {
     private Double getMatchScore(Map<String, Object> userProfile, Map<String, Object> storeProfile,
                 Double userLongitude, Double userLatitude) {
         // store info
-        System.out.println("getMatchScore called on " + userProfile.get("userId").toString() + " and " + storeProfile.get("storeId").toString());
+        System.out.println("getMatchScore called on " + userProfile.get("userId").toString() + " and " + storeProfile.get("name").toString());
         Integer reviewCount = (Integer) storeProfile.get("review_count");
         Double rating = (Double) storeProfile.get("rating");
         String category = (String) storeProfile.get("categories");
@@ -185,7 +185,7 @@ public class AdMatchTask implements StreamTask, InitableTask {
         // device and price match score
         Integer valueMatchScore = Math.abs(getPriceValue(price) - getDeviceValue(device));
         if (valueMatchScore > 0) {
-            System.out.println("    device & price match bias added: valueMatchScore = " + valueMatchScore.toString());
+            System.out.println("    device & price match penalty: valueMatchScore = " + valueMatchScore.toString());
             score *= (1.0 - 0.1 * valueMatchScore);
         }
         // distance score
