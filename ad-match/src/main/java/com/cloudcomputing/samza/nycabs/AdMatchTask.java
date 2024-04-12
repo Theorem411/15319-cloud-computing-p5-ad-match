@@ -91,7 +91,7 @@ public class AdMatchTask implements StreamTask, InitableTask {
         if (bloodSugar.intValue() > 4 && mood.intValue() > 6 && active.intValue() == 3) {
             tags.add("lowCalories");
         }
-        if (bloodSugar.intValue() < 3 || mood.intValue() < 4) {
+        if (bloodSugar.intValue() < 2 || mood.intValue() < 4) {
             tags.add("energyProviders");
         }
         if (active.intValue() == 3) {
