@@ -283,6 +283,8 @@ public class AdMatchTask implements StreamTask, InitableTask {
         userProfile.put("bloodSugar", bloodSugar);
         userProfile.put("stress", stress);
         userProfile.put("active", active);
+        System.out.println("after processRiderStatus, userId " + userId.toString() + " becomes...");
+        System.out.println(userInfo.get(userId).toString());
     }
 
     public void processRideRequest(String blockId, Integer clientId, Double userLongitude,
