@@ -17,10 +17,10 @@ import java.util.Map;
 public class AdMatchTaskApplication implements TaskApplication {
     // Consider modify this zookeeper address, localhost may not be a good choice.
     // If this task application is executing in slave machine.
-    private static final List<String> KAFKA_CONSUMER_ZK_CONNECT = ImmutableList.of(":2181"); // TODO: Fill in
+    private static final List<String> KAFKA_CONSUMER_ZK_CONNECT = ImmutableList.of("172.31.30.72:2181"); // TODO: Fill in
 
     // Consider modify the bootstrap servers address. This example only cover one address.
-    private static final List<String> KAFKA_PRODUCER_BOOTSTRAP_SERVERS = ImmutableList.of(":9092"); // TODO: fill in
+    private static final List<String> KAFKA_PRODUCER_BOOTSTRAP_SERVERS = ImmutableList.of("172.31.22.52:9092", "172.31.26.200:9092", "172.31.30.72:9092"); // TODO: fill in
     private static final Map<String, String> KAFKA_DEFAULT_STREAM_CONFIGS = ImmutableMap.of("replication.factor", "1");
 
     @Override
