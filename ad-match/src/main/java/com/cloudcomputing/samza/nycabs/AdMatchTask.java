@@ -291,10 +291,10 @@ public class AdMatchTask implements StreamTask, InitableTask {
     public void processRiderStatus(Integer userId, Integer mood, Integer bloodSugar,
             Integer stress, Integer active) {
         // TODO: fill in
-        System.out.println("processRiderStatus(" + userId.toString() + ")...");
+        System.out.println("processRiderStatus(" + userId.toString() + ", " + mood.toString() + ", " + bloodSugar.toString() + ", " + stress.toString() + ", " + active.toString() + ")...");
         Map<String, Object> userProfile = userInfo.get(userId);
         userProfile.put("mood", mood);
-        userProfile.put("bloodSugar", bloodSugar);
+        userProfile.put("blood_sugar", bloodSugar);
         userProfile.put("stress", stress);
         userProfile.put("active", active);
         System.out.println("after processRiderStatus, userId " + userId.toString() + " becomes...");
