@@ -1,6 +1,5 @@
 package com.cloudcomputing.samza.nycabs;
 
-
 import com.cloudcomputing.samza.nycabs.application.AdMatchTaskApplication;
 import org.apache.samza.serializers.NoOpSerde;
 import org.apache.samza.test.framework.TestRunner;
@@ -43,9 +42,11 @@ public class TestAdMatchTask {
                 .addConfig("deploy.test", "true")
                 .run(Duration.ofSeconds(7));
 
-        Assert.assertEquals(5, TestRunner.consumeStream(outputAdStream, Duration.ofSeconds(7)).get(0).size());
+        Assert.assertEquals(5,
+                TestRunner.consumeStream(outputAdStream, Duration.ofSeconds(7)).get(0).size());
 
-        ListIterator<Object> resultIter = TestRunner.consumeStream(outputAdStream, Duration.ofSeconds(7)).get(0).listIterator();
+        ListIterator<Object> resultIter = TestRunner.consumeStream(outputAdStream, Duration.ofSeconds(7)).get(0)
+                .listIterator();
 
         Map<String, Object> baseScoreTest = (Map<String, Object>) resultIter.next();
         Assert.assertTrue(baseScoreTest.get("userId").toString().equals("0")
@@ -74,7 +75,8 @@ public class TestAdMatchTask {
         } else {
             double theta = lon1 - lon2;
             double dist = Math.sin(Math.toRadians(lat1)) * Math.sin(Math.toRadians(lat2))
-                    + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) * Math.cos(Math.toRadians(theta));
+                    + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2))
+                            * Math.cos(Math.toRadians(theta));
             dist = Math.acos(dist);
             dist = Math.toDegrees(dist);
             dist = dist * 60 * 1.1515;

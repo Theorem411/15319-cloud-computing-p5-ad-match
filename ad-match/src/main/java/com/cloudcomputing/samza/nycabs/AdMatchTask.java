@@ -36,7 +36,7 @@ public class AdMatchTask implements StreamTask, InitableTask {
     // storeId to business store profile
     private KeyValueStore<String, Map<String, Object>> yelpInfo;
 
-    // Tags for businesses categories 
+    // Tags for businesses categories
     private Set<String> lowCalories;
 
     private Set<String> energyProviders;
@@ -96,7 +96,7 @@ public class AdMatchTask implements StreamTask, InitableTask {
         }
         if (active.intValue() == 3) {
             tags.add("willingTour");
-        } 
+        }
         if (stress.intValue() > 5 || active.intValue() == 1 || mood.intValue() < 4) {
             tags.add("stressRelease");
         }
@@ -109,21 +109,21 @@ public class AdMatchTask implements StreamTask, InitableTask {
         }
         return tags;
     }
-    
+
     private Boolean tagMatch(String storeTag, Set<String> userTags) {
         return userTags.contains(storeTag);
     }
-    
+
     // match score helper
     private Integer getDeviceValue(String device) {
         if (device.equals("iPhone 5")) {
             return 1;
         } else if (device.equals("iPhone 7")) {
-            return 2; 
+            return 2;
         } else if (device.equals("iPhone XS")) {
-            return 3; 
+            return 3;
         } else {
-            return 0; 
+            return 0;
         }
     }
 
@@ -140,27 +140,28 @@ public class AdMatchTask implements StreamTask, InitableTask {
     }
 
     private Double getDistance(Double lon1, Double lat1, Double lon2, Double lat2, String unit) {
-		if ((lat1 == lat2) && (lon1 == lon2)) {
-			return 0.0;
-		}
-		else {
-			double theta = lon1 - lon2;
-			double dist = Math.sin(Math.toRadians(lat1)) * Math.sin(Math.toRadians(lat2)) + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) * Math.cos(Math.toRadians(theta));
-			dist = Math.acos(dist);
-			dist = Math.toDegrees(dist);
-			dist = dist * 60 * 1.1515;
-			if (unit.equals("K")) {
-				dist = dist * 1.609344;
-			} else if (unit.equals("N")) {
-				dist = dist * 0.8684;
-			}
-			return (dist);
-		}
-	}
+        if ((lat1 == lat2) && (lon1 == lon2)) {
+            return 0.0;
+        } else {
+            double theta = lon1 - lon2;
+            double dist = Math.sin(Math.toRadians(lat1)) * Math.sin(Math.toRadians(lat2))
+                    + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) * Math.cos(Math.toRadians(theta));
+            dist = Math.acos(dist);
+            dist = Math.toDegrees(dist);
+            dist = dist * 60 * 1.1515;
+            if (unit.equals("K")) {
+                dist = dist * 1.609344;
+            } else if (unit.equals("N")) {
+                dist = dist * 0.8684;
+            }
+            return (dist);
+        }
+    }
 
-    private Double getMatchScore(Map<String, Object> userProfile, Map<String, Object> storeProfile, 
+    private Double getMatchScore(Map<String, Object> userProfile, Map<String, Object> storeProfile,
                 Double userLongitude, Double userLatitude) {
-        // store info 
+        // store info
+        System.out.println("getMatchScore called on " + userProfile.get("userId").toString() + " and " + storeProfile.get("storeId").toString());
         Integer reviewCount = (Integer) storeProfile.get("review_count");
         Double rating = (Double) storeProfile.get("rating");
         String category = (String) storeProfile.get("categories");
@@ -174,16 +175,22 @@ public class AdMatchTask implements StreamTask, InitableTask {
         String device = (String) userProfile.get("device");
 
         // initial match score
-        Double score = reviewCount * rating; 
+        Double score = reviewCount * rating;
+        System.out.println("    base score = " + reviewCount.toString() + " * " + rating.toString() + " = " + score.toString());
         // interest exact match +10
         if (category.equals(interest)) {
+            System.out.println("    bonus added! store category matches user interest: " + interest.toString());
             score += 10.0;
         }
         // device and price match score
-        score *= (1.0 - 0.1 * Math.abs(getPriceValue(price) - getDeviceValue(device)));
+        Integer valueMatchScore = Math.abs(getPriceValue(price) - getDeviceValue(device));
+        if (valueMatchScore > 0) {
+            System.out.println("    device & price match bias added: valueMatchScore = " + valueMatchScore.toString());
+            score *= (1.0 - 0.1 * valueMatchScore);
+        }
         // distance score
         Double distance = getDistance(userLongitude, userLatitude, storeLongitude, storeLatitude, "M");
-        
+
         Double distanceThres;
         if (age.intValue() > 20 && travelCount.intValue() <= 50) {
             distanceThres = 5.0; // unit: mile
@@ -191,7 +198,10 @@ public class AdMatchTask implements StreamTask, InitableTask {
             distanceThres = 10.0; // unit: mile
         }
 
+        System.out.println("    distance threshold for " + userProfile.get("userId").toString() + " is " + distanceThres.toString());
+
         if (distance > distanceThres) {
+            System.out.println("    distance penalty added, distance = " + distance.toString());
             score *= 0.1;
         }
 
@@ -265,7 +275,7 @@ public class AdMatchTask implements StreamTask, InitableTask {
         }
     }
 
-    public void processRiderStatus(Integer userId, Integer mood, Integer bloodSugar, 
+    public void processRiderStatus(Integer userId, Integer mood, Integer bloodSugar,
             Integer stress, Integer active) {
         // TODO: fill in
         Map<String, Object> userProfile = userInfo.get(userId);
@@ -275,7 +285,7 @@ public class AdMatchTask implements StreamTask, InitableTask {
         userProfile.put("active", active);
     }
 
-    public void processRideRequest(String blockId, Integer clientId, Double userLongitude, 
+    public void processRideRequest(String blockId, Integer clientId, Double userLongitude,
             Double userLatitude, String genderPreference, MessageCollector collector) {
         // TODO: fill in
         Map<String, Object> userProfile = userInfo.get(clientId);
@@ -296,7 +306,7 @@ public class AdMatchTask implements StreamTask, InitableTask {
                     // only process stores that have matching tags
                     continue;
                 }
-                
+
                 Double storeScore = getMatchScore(userProfile, storeProfile, userLongitude, userLatitude);
                 if (storeScore > bestStoreScore) {
                     bestStoreId = storeId;
@@ -349,7 +359,7 @@ public class AdMatchTask implements StreamTask, InitableTask {
 
     @Override
     @SuppressWarnings("unchecked")
-    public void process(IncomingMessageEnvelope envelope, MessageCollector collector, 
+    public void process(IncomingMessageEnvelope envelope, MessageCollector collector,
             TaskCoordinator coordinator) {
         /*
          * All the messsages are partitioned by blockId, which means the messages
@@ -364,7 +374,7 @@ public class AdMatchTask implements StreamTask, InitableTask {
             processEvents((Map<String, Object>) envelope.getMessage(), collector);
         } else {
             throw new IllegalStateException(
-                "Unexpected input stream: " + envelope.getSystemStreamPartition());
+                    "Unexpected input stream: " + envelope.getSystemStreamPartition());
         }
     }
 }
