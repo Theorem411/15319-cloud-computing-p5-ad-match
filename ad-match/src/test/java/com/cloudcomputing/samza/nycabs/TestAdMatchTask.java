@@ -48,33 +48,32 @@ public class TestAdMatchTask {
         ListIterator<Object> resultIter = TestRunner.consumeStream(outputAdStream, Duration.ofSeconds(7)).get(0)
                 .listIterator();
 
-        System.out.println("based score test...");
+        // System.out.println("based score test...");
         Map<String, Object> baseScoreTest = (Map<String, Object>) resultIter.next();
         Assert.assertTrue(baseScoreTest.get("userId").toString().equals("0")
                 && baseScoreTest.get("name").toString().equals("Cloud Bakery"));
 
-        System.out.println("interest test...");
+        // System.out.println("interest test...");
         Map<String, Object> interestTest = (Map<String, Object>) resultIter.next();
         Assert.assertTrue(interestTest.get("userId").toString().equals("1")
                 && interestTest.get("name").toString().equals("Cloud Ramen"));
 
-        System.out.println("afford test...");
+        // System.out.println("afford test...");
         Map<String, Object> affordTest = (Map<String, Object>) resultIter.next();
         Assert.assertTrue(affordTest.get("userId").toString().equals("2")
                 && affordTest.get("name").toString().equals("Luxury Cloud Bakery"));
 
-        System.out.println("update status test...");
+        // System.out.println("update status test...");
         Map<String, Object> updateStatusTest = (Map<String, Object>) resultIter.next();
-        System.out.println("\t" + updateStatusTest.get("name").toString());
         Assert.assertTrue(updateStatusTest.get("userId").toString().equals("3")
                 && updateStatusTest.get("name").toString().equals("Cloud Cafe"));
         
-        System.out.println("update age test...");
+        // System.out.println("update age test...");
         Map<String, Object> ageTest = (Map<String, Object>) resultIter.next();
         Assert.assertTrue(ageTest.get("userId").toString().equals("4")
                 && ageTest.get("name").toString().equals("Cloud Bakery II"));
 
-        System.out.println("distance test...");
+        // System.out.println("distance test...");
         Map<String, Object> distTest1 = (Map<String, Object>) resultIter.next();
         Assert.assertTrue(distTest1.get("userId").toString().equals("5")
                 && distTest1.get("name").toString().equals("Cloud Thai Far"));
@@ -83,25 +82,25 @@ public class TestAdMatchTask {
         Assert.assertTrue(distTest2.get("userId").toString().equals("6")
                 && distTest2.get("name").toString().equals("Cloud Thai Near"));
         
-        System.out.println("travel count test...");
+        // System.out.println("travel count test...");
         Map<String, Object> travelCountTest = (Map<String, Object>) resultIter.next();
         Assert.assertTrue(travelCountTest.get("userId").toString().equals("7")
                 && travelCountTest.get("name").toString().equals("Cloud Thai Far"));
         
     }
 
-    private static double distance(double lat1, double lon1, double lat2, double lon2) {
-        if ((lat1 == lat2) && (lon1 == lon2)) {
-            return 0;
-        } else {
-            double theta = lon1 - lon2;
-            double dist = Math.sin(Math.toRadians(lat1)) * Math.sin(Math.toRadians(lat2))
-                    + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2))
-                            * Math.cos(Math.toRadians(theta));
-            dist = Math.acos(dist);
-            dist = Math.toDegrees(dist);
-            dist = dist * 60 * 1.1515;
-            return (dist);
-        }
-    }
+    // private static double distance(double lat1, double lon1, double lat2, double lon2) {
+    //     if ((lat1 == lat2) && (lon1 == lon2)) {
+    //         return 0;
+    //     } else {
+    //         double theta = lon1 - lon2;
+    //         double dist = Math.sin(Math.toRadians(lat1)) * Math.sin(Math.toRadians(lat2))
+    //                 + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2))
+    //                         * Math.cos(Math.toRadians(theta));
+    //         dist = Math.acos(dist);
+    //         dist = Math.toDegrees(dist);
+    //         dist = dist * 60 * 1.1515;
+    //         return (dist);
+    //     }
+    // }
 }

@@ -159,9 +159,8 @@ public class AdMatchTask implements StreamTask, InitableTask {
     }
 
     private Double getMatchScore(Map<String, Object> userProfile, Map<String, Object> storeProfile,
-                Double userLongitude, Double userLatitude) {
+            Double userLongitude, Double userLatitude) {
         // store info
-        System.out.println("getMatchScore called on " + userProfile.get("userId").toString() + " and " + storeProfile.get("name").toString());
         Integer reviewCount = (Integer) storeProfile.get("review_count");
         Double rating = (Double) storeProfile.get("rating");
         String category = (String) storeProfile.get("categories");
@@ -176,16 +175,13 @@ public class AdMatchTask implements StreamTask, InitableTask {
 
         // initial match score
         Double score = reviewCount * rating;
-        System.out.println("    base score = " + reviewCount.toString() + " * " + rating.toString() + " = " + score.toString());
         // interest exact match +10
         if (category.equals(interest)) {
-            System.out.println("    bonus added! store category matches user interest: " + interest.toString());
             score += 10.0;
         }
         // device and price match score
         Integer valueMatchScore = Math.abs(getPriceValue(price) - getDeviceValue(device));
         if (valueMatchScore > 0) {
-            System.out.println("    device & price match penalty: valueMatchScore = " + valueMatchScore.toString());
             score *= (1.0 - 0.1 * valueMatchScore);
         }
         // distance score
@@ -198,13 +194,9 @@ public class AdMatchTask implements StreamTask, InitableTask {
             distanceThres = 10.0; // unit: mile
         }
 
-        System.out.println("    distance threshold for " + userProfile.get("userId").toString() + " is " + distanceThres.toString());
-        System.out.println("    distance = " + distance.toString());
         if (distance > distanceThres) {
-            System.out.println("    distance penalty added, distance = " + distance.toString());
             score *= 0.1;
         }
-        System.out.println("    final score = " + score.toString());
         return score;
     }
 
@@ -278,21 +270,19 @@ public class AdMatchTask implements StreamTask, InitableTask {
     public void processRiderStatus(Integer userId, Integer mood, Integer bloodSugar,
             Integer stress, Integer active) {
         // TODO: fill in
-        System.out.println("processRiderStatus(" + userId.toString() + ", " + mood.toString() + ", " + bloodSugar.toString() + ", " + stress.toString() + ", " + active.toString() + ")...");
         Map<String, Object> userProfile = userInfo.get(userId);
         userProfile.put("mood", mood);
         userProfile.put("blood_sugar", bloodSugar);
         userProfile.put("stress", stress);
         userProfile.put("active", active);
-        System.out.println(userInfo.get(userId).toString());
     }
 
     public void processRideRequest(String blockId, Integer clientId, Double userLongitude,
             Double userLatitude, String genderPreference, MessageCollector collector) {
         // TODO: fill in
-        System.out.println("processRideRequest(" + clientId.toString() + ")...");
+        // System.out.println("processRideRequest(" + clientId.toString() + ")...");
         Map<String, Object> userProfile = userInfo.get(clientId);
-        System.out.println(userProfile.toString());
+        // System.out.println(userProfile.toString());
         Set<String> userTags = getUserTags(userProfile);
 
         String bestStoreId = null;
@@ -306,7 +296,6 @@ public class AdMatchTask implements StreamTask, InitableTask {
                 Map<String, Object> storeProfile = entry.getValue();
                 String storeTag = (String) storeProfile.get("tag");
 
-                System.out.println(storeProfile.get("name").toString() + " has tag: " + storeTag + ", userId " + clientId + " has tags: " + userTags.toString());
                 if (!tagMatch(storeTag, userTags)) {
                     // only process stores that have matching tags
                     continue;
