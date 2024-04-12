@@ -95,7 +95,8 @@ public class AdMatchTask implements StreamTask, InitableTask {
             /// DEBUG
             if ((Integer) userProfile.get("userId") == 3) {
                 System.out.println("after riderStatus update, client 3 should not have energyProviders tag");
-                System.out.println(userProfile.toString());
+                System.out.println(bloodSugar.intValue());
+                System.out.println(mood.intValue());
             }
             tags.add("energyProviders");
         }
