@@ -204,7 +204,7 @@ public class AdMatchTask implements StreamTask, InitableTask {
             System.out.println("    distance penalty added, distance = " + distance.toString());
             score *= 0.1;
         }
-
+        System.out.println("    final score = " + score.toString());
         return score;
     }
 
