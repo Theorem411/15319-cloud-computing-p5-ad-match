@@ -291,6 +291,7 @@ public class AdMatchTask implements StreamTask, InitableTask {
     public void processRiderStatus(Integer userId, Integer mood, Integer bloodSugar,
             Integer stress, Integer active) {
         // TODO: fill in
+        System.out.println("processRiderStatus(" + userId.toString() + ")...");
         Map<String, Object> userProfile = userInfo.get(userId);
         userProfile.put("mood", mood);
         userProfile.put("bloodSugar", bloodSugar);
@@ -303,6 +304,7 @@ public class AdMatchTask implements StreamTask, InitableTask {
     public void processRideRequest(String blockId, Integer clientId, Double userLongitude,
             Double userLatitude, String genderPreference, MessageCollector collector) {
         // TODO: fill in
+        System.out.println("processRideRequest(" + clientId.toString() + ")...");
         Map<String, Object> userProfile = userInfo.get(clientId);
         Set<String> userTags = getUserTags(userProfile);
 
