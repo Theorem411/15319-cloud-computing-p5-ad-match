@@ -87,6 +87,13 @@ public class AdMatchTask implements StreamTask, InitableTask {
         Integer bloodSugar = (Integer) userProfile.get("blood_sugar");
         Integer active = (Integer) userProfile.get("active");
 
+        if ((Integer) userProfile.get("userId") == 3) {
+            System.out.println("mood:       " + mood.toString());
+            System.out.println("bloodSugar: " + bloodSugar.toString());
+            System.out.println("stress:     " + stress.toString());
+            System.out.println("active:     " + active.toString());
+        }
+
         Set<String> tags = new HashSet<String>();
         if (bloodSugar.intValue() > 4 && mood.intValue() > 6 && active.intValue() == 3) {
             tags.add("lowCalories");
