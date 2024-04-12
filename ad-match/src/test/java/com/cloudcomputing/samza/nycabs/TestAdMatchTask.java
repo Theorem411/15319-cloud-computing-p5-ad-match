@@ -48,10 +48,12 @@ public class TestAdMatchTask {
         ListIterator<Object> resultIter = TestRunner.consumeStream(outputAdStream, Duration.ofSeconds(7)).get(0)
                 .listIterator();
 
+        System.out.println("based score test...");
         Map<String, Object> baseScoreTest = (Map<String, Object>) resultIter.next();
         Assert.assertTrue(baseScoreTest.get("userId").toString().equals("0")
                 && baseScoreTest.get("name").toString().equals("Cloud Bakery"));
 
+        System.out.println("interest test...");
         Map<String, Object> interestTest = (Map<String, Object>) resultIter.next();
         Assert.assertTrue(interestTest.get("userId").toString().equals("1")
                 && interestTest.get("name").toString().equals("Cloud Ramen"));
@@ -63,6 +65,7 @@ public class TestAdMatchTask {
 
         System.out.println("update status test...");
         Map<String, Object> updateStatusTest = (Map<String, Object>) resultIter.next();
+        System.out.println("\t" + updateStatusTest.get("name").toString());
         Assert.assertTrue(updateStatusTest.get("userId").toString().equals("3")
                 && updateStatusTest.get("name").toString().equals("Cloud Cafe"));
         
