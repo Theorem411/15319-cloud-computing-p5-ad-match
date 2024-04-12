@@ -42,7 +42,7 @@ public class TestAdMatchTask {
                 .addConfig("deploy.test", "true")
                 .run(Duration.ofSeconds(7));
 
-        Assert.assertEquals(5,
+        Assert.assertEquals(8,
                 TestRunner.consumeStream(outputAdStream, Duration.ofSeconds(7)).get(0).size());
 
         ListIterator<Object> resultIter = TestRunner.consumeStream(outputAdStream, Duration.ofSeconds(7)).get(0)
@@ -73,6 +73,21 @@ public class TestAdMatchTask {
         Map<String, Object> ageTest = (Map<String, Object>) resultIter.next();
         Assert.assertTrue(ageTest.get("userId").toString().equals("4")
                 && ageTest.get("name").toString().equals("Cloud Bakery II"));
+
+        System.out.println("distance test...");
+        Map<String, Object> distTest1 = (Map<String, Object>) resultIter.next();
+        Assert.assertTrue(distTest1.get("userId").toString().equals("5")
+                && distTest1.get("name").toString().equals("Cloud Thai Far"));
+
+        Map<String, Object> distTest2 = (Map<String, Object>) resultIter.next();
+        Assert.assertTrue(distTest2.get("userId").toString().equals("6")
+                && distTest2.get("name").toString().equals("Cloud Thai Near"));
+        
+        System.out.println("travel count test...");
+        Map<String, Object> travelCountTest = (Map<String, Object>) resultIter.next();
+        Assert.assertTrue(travelCountTest.get("userId").toString().equals("7")
+                && travelCountTest.get("name").toString().equals("Cloud Thai Far"));
+        
     }
 
     private static double distance(double lat1, double lon1, double lat2, double lon2) {

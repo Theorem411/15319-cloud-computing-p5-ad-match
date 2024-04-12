@@ -87,24 +87,11 @@ public class AdMatchTask implements StreamTask, InitableTask {
         Integer bloodSugar = (Integer) userProfile.get("blood_sugar");
         Integer active = (Integer) userProfile.get("active");
 
-        if ((Integer) userProfile.get("userId") == 3) {
-            System.out.println("mood:       " + mood.toString());
-            System.out.println("bloodSugar: " + bloodSugar.toString());
-            System.out.println("stress:     " + stress.toString());
-            System.out.println("active:     " + active.toString());
-        }
-
         Set<String> tags = new HashSet<String>();
         if (bloodSugar.intValue() > 4 && mood.intValue() > 6 && active.intValue() == 3) {
             tags.add("lowCalories");
         }
         if (bloodSugar.intValue() < 2 || mood.intValue() < 4) {
-            /// DEBUG
-            if ((Integer) userProfile.get("userId") == 3) {
-                System.out.println("after riderStatus update, client 3 should not have energyProviders tag");
-                System.out.println(bloodSugar.intValue());
-                System.out.println(mood.intValue());
-            }
             tags.add("energyProviders");
         }
         if (active.intValue() == 3) {
@@ -212,7 +199,7 @@ public class AdMatchTask implements StreamTask, InitableTask {
         }
 
         System.out.println("    distance threshold for " + userProfile.get("userId").toString() + " is " + distanceThres.toString());
-
+        System.out.println("    distance = " + distance.toString());
         if (distance > distanceThres) {
             System.out.println("    distance penalty added, distance = " + distance.toString());
             score *= 0.1;
@@ -297,7 +284,6 @@ public class AdMatchTask implements StreamTask, InitableTask {
         userProfile.put("blood_sugar", bloodSugar);
         userProfile.put("stress", stress);
         userProfile.put("active", active);
-        System.out.println("after processRiderStatus, userId " + userId.toString() + " becomes...");
         System.out.println(userInfo.get(userId).toString());
     }
 

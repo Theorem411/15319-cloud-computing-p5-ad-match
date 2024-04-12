@@ -5,3 +5,6 @@
 {"userId":3,"mood":5,"blood_sugar":4,"stress":7,"active":0,"type":"RIDER_STATUS"}
 {"blockId":45,"clientId":3,"latitude":40.6799404643263,"longitude":-73.980282552649,"type":"RIDE_REQUEST","gender_preference":"N"}
 {"blockId":45,"clientId":4,"latitude":40.6799404643263,"longitude":-73.980282552649,"type":"RIDE_REQUEST","gender_preference":"N"}
+{"blockId":45,"clientId":5,"latitude":0.0,"longitude":0.0,"type":"RIDE_REQUEST","gender_preference":"N"}
+{"blockId":45,"clientId":6,"latitude":0.0,"longitude":0.0,"type":"RIDE_REQUEST","gender_preference":"N"}
+{"blockId":45,"clientId":7,"latitude":0.0,"longitude":0.0,"type":"RIDE_REQUEST","gender_preference":"N"}
